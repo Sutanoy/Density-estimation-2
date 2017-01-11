@@ -1,0 +1,12 @@
+function g = locallinearregbivariate(Y,Z1,Z2,x);
+n=size(Z1,1);
+[a,pts,h1]=ksdensity(Z1);
+[a,pts,h2]=ksdensity(Z2);
+h=max([h1,h2,2]);
+Z=cat(2,Z1,Z2);
+diff=Z- ones(n,1)*x;
+z2=mvnpdf(diff/h,[0 0],eye(2));
+W=diag(z2);
+e1=[1;zeros(2,1)];
+X=cat(2,ones(n,1),diff);
+g=e1'*inv(X'*W*X)*X'*W*Y;
